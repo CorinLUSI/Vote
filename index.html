@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Vote</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <style>
+        .title {
+            font-size: 1.75rem;
+            margin-bottom: .5rem;
+            font-family: inherit;
+            font-weight: 500;
+            line-height: 1.2;
+            color: inherit;
+            margin-top: 0;
+        }
+
+        .proposal {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .tags {
+            color: #fff;
+            background-color: #343a40;
+            padding-right: .6em;
+            padding-left: .6em;
+            border-radius: 10rem;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            display: inline-block;
+            padding: .25em .4em;
+            min-width: 50px;
+            max-width: 70px;
+        }
+    </style>
+</head>
+
+<body>
+    <div clas="container">
+        <div class="row justify-content-center">
+            <div class="col-10 col-xl-6 mt-sm-5">
+                <h1>Share your Proposal with others!</h1>
+                <form action="#" method="post">
+<!--
+                    <div class="form-group">
+                        <div class="alert alert-success" role="alert">
+                            <span id="datetime"></span>
+                        </div>
+                    </div>
+-->
+                    <div class="form-group">
+                        <label for="name">Give your Proposal a Title</label>
+                        <input name="title" id="title" class="form-control" type="text" placeholder="Default input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="proposal">Describe your proposal</label>
+                        <textarea name="proposal" id="proposal" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="tags">Tag your Proposal</label>
+                        <input name="tags" id="tags" type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input" required>
+                    </div>
+                    <div class="form-group">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" value="send">Sumbit Proposal</button>
+                </form>
+                <div class="card mt-5" id="output">
+                    <h2>Your Proposal</h2>
+                </div>
+                <div class="mt-3">
+                    <button id="pro" type="button" class="btn btn-success">Pro</button>
+                    <button id="contra" type="button" class="btn btn-danger">Contra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script>
+        $(function() {
+
+            (function($) {
+                $.fn.serializeFormJSON = function() {
+
+                    var o = {};
+                    var a = this.serializeArray();
+                    $.each(a, function() {
+                        if (o[this.name]) {
+                            if (!o[this.name].push) {
+                                o[this.name] = [o[this.name]];
+                            }
+                            o[this.name].push(this.value || '');
+                        } else {
+                            o[this.name] = this.value || '';
+                        }
+                    });
+                    return o;
+                };
+            })(jQuery);
+
+            $('form').submit(function(e) {
+                e.preventDefault();
+                var data = $(this).serializeFormJSON();
+                console.log(data);
+                $.ajax({
+                    type: "POST",
+                    dataType: 'json',
+                    async: false,
+                    url: 'save_json.php',
+                    data: {
+                        data: JSON.stringify(data)
+                    },
+                    success: function() {
+                        alert("Thanks!");
+                    },
+                    failure: function() {
+                        alert("Error!");
+                    }
+                });
+            });
+            //        $("#datetime").append( $.now() );
+
+        });
+
+    </script>
+    <script>
+        $(document).ready(function() {
+            $.getJSON("test.json", function(data) {
+                var items = [];
+                $.each(data, function(key, val) {
+                    items.push("<div class='" + key + "'>" + val + "</div>");
+                });
+
+                $("<div />", {
+                    "class": "card",
+                    html: items.join("")
+                }).appendTo("#output");
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
