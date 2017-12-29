@@ -1,5 +1,5 @@
 <?php
-$myFile = "file:///Users/Corin/Sites/vote/test.json";
+$myFile = "./test.json";
 $fh = fopen($myFile, 'w') or die("can't open file");
 $stringData = $_POST["data"];
 fwrite($fh, $stringData);
