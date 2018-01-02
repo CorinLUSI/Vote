@@ -340,9 +340,8 @@
                     dataType: 'json',
                     async: false,
                     url: './save_vote.php',
-                    data: {
-                        "countnumber": JSON.stringify(count)
-                    },
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify ({ "countnumber": count['countnumber'] }),
                     success: function() {
                         alert("Thanks!");
                     },
